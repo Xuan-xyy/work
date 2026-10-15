@@ -1,0 +1,338 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ==================================================================
+   设计令牌 —— 「藕荷」主题
+   参考风格：柔和粉紫、玻璃拟态、大圆角、衬线标题。
+   全部走 CSS-first（Tailwind v4 不生成 tailwind.config.js）。
+   ------------------------------------------------------------------
+   两条线索：
+   ① 核心令牌（background/card/primary…）在 :root / .dark 里切换；
+   ② 语义色阶（emerald/amber/rose…）用 color-mix 从单一基色推导出整条色阶，
+      把原本鲜艳的 Tailwind 默认色替换成低饱和版本。
+      这样全站 60+ 处 text-emerald-600 / bg-amber-50 之类不需要改类名，
+      但颜色会自动统一到本主题里 —— 这是「去 AI 感」最关键的一步：
+      默认的饱和绿/琥珀/玫瑰红正是通用仪表盘的味道。
+   ================================================================== */
+
+:root {
+  /* 大圆角是这套风格的基础，20px 起步 */
+  --radius: 1.25rem;
+
+  /* 藕荷色基色，用于推导语义色阶 */
+  --tone-good: oklch(0.62 0.072 168);
+  --tone-warn: oklch(0.72 0.085 72);
+  --tone-bad: oklch(0.63 0.105 22);
+  --tone-info: oklch(0.62 0.07 262);
+  --tone-lilac: oklch(0.62 0.08 305);
+  --tone-slate: oklch(0.58 0.014 340);
+  --tone-zinc: oklch(0.56 0.008 340);
+  --tone-anchor: oklch(0.24 0.02 340);
+
+  /* 画布：带着一层极淡的腮红，不再是纯白 */
+  --background: oklch(0.973 0.013 345);
+  --foreground: oklch(0.3 0.036 340);
+  /* 玻璃面板：半透明白，靠 backdrop-blur 出质感 */
+  --card: oklch(1 0 0 / 66%);
+  --card-foreground: oklch(0.3 0.036 340);
+  --popover: oklch(0.995 0.004 345 / 94%);
+  --popover-foreground: oklch(0.3 0.036 340);
+  --primary: oklch(0.585 0.122 352);
+  --primary-foreground: oklch(0.99 0.006 350);
+  --secondary: oklch(0.955 0.018 345);
+  --secondary-foreground: oklch(0.38 0.038 340);
+  --muted: oklch(0.955 0.014 345 / 70%);
+  --muted-foreground: oklch(0.565 0.03 340);
+  --accent: oklch(0.945 0.028 348);
+  --accent-foreground: oklch(0.36 0.05 345);
+  --destructive: oklch(0.58 0.14 22);
+  --border: oklch(0.9 0.022 345 / 70%);
+  --input: oklch(1 0 0 / 55%);
+  --ring: oklch(0.585 0.122 352 / 40%);
+
+  --chart-1: oklch(0.66 0.11 352);
+  --chart-2: oklch(0.72 0.075 300);
+  --chart-3: oklch(0.68 0.07 205);
+  --chart-4: oklch(0.74 0.08 70);
+  --chart-5: oklch(0.62 0.07 168);
+
+  --sidebar: oklch(1 0 0 / 52%);
+  --sidebar-foreground: oklch(0.3 0.036 340);
+  --sidebar-primary: oklch(0.585 0.122 352);
+  --sidebar-primary-foreground: oklch(0.99 0.006 350);
+  --sidebar-accent: oklch(0.95 0.03 348);
+  --sidebar-accent-foreground: oklch(0.36 0.05 345);
+  --sidebar-border: oklch(0.92 0.02 345 / 60%);
+  --sidebar-ring: oklch(0.585 0.122 352 / 40%);
+
+  /* 投递阶段色：刻意做成同色系的阶调，只有 Offer 用鼠尾草绿、已挂用陶土红做信号。
+     原来这里是一组饱和彩虹色（蓝/琥珀/紫/翠绿/玫红），是整站最重的「AI 感」来源。 */
+  --stage-wishlist: oklch(0.84 0.022 340);
+  --stage-applied: oklch(0.63 0.105 352);
+  --stage-written: oklch(0.73 0.088 62);
+  --stage-interview: oklch(0.65 0.088 305);
+  --stage-offer: oklch(0.67 0.078 168);
+  --stage-rejected: oklch(0.6 0.12 22);
+  --stage-withdrawn: oklch(0.79 0.012 340);
+}
+
+.dark {
+  --tone-good: oklch(0.72 0.08 168);
+  --tone-warn: oklch(0.78 0.09 72);
+  --tone-bad: oklch(0.72 0.11 22);
+  --tone-info: oklch(0.72 0.08 262);
+  --tone-lilac: oklch(0.72 0.09 305);
+  --tone-slate: oklch(0.7 0.014 340);
+  --tone-zinc: oklch(0.7 0.008 340);
+  --tone-anchor: oklch(0.16 0.016 340);
+
+  --background: oklch(0.215 0.022 340);
+  --foreground: oklch(0.945 0.012 345);
+  --card: oklch(0.3 0.024 340 / 55%);
+  --card-foreground: oklch(0.945 0.012 345);
+  --popover: oklch(0.255 0.024 340 / 96%);
+  --popover-foreground: oklch(0.945 0.012 345);
+  --primary: oklch(0.7 0.115 352);
+  --primary-foreground: oklch(0.19 0.02 340);
+  --secondary: oklch(0.32 0.024 340 / 70%);
+  --secondary-foreground: oklch(0.93 0.014 345);
+  --muted: oklch(0.34 0.02 340 / 55%);
+  --muted-foreground: oklch(0.72 0.022 345);
+  --accent: oklch(0.36 0.04 348 / 70%);
+  --accent-foreground: oklch(0.96 0.012 345);
+  --destructive: oklch(0.68 0.13 22);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 10%);
+  --ring: oklch(0.7 0.115 352 / 45%);
+
+  --chart-1: oklch(0.74 0.11 352);
+  --chart-2: oklch(0.76 0.08 300);
+  --chart-3: oklch(0.74 0.08 205);
+  --chart-4: oklch(0.78 0.09 70);
+  --chart-5: oklch(0.72 0.08 168);
+
+  --sidebar: oklch(0.28 0.024 340 / 50%);
+  --sidebar-foreground: oklch(0.945 0.012 345);
+  --sidebar-primary: oklch(0.7 0.115 352);
+  --sidebar-primary-foreground: oklch(0.19 0.02 340);
+  --sidebar-accent: oklch(0.36 0.04 348 / 70%);
+  --sidebar-accent-foreground: oklch(0.96 0.012 345);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.7 0.115 352 / 45%);
+
+  --stage-wishlist: oklch(0.7 0.022 340);
+  --stage-applied: oklch(0.72 0.105 352);
+  --stage-written: oklch(0.78 0.085 62);
+  --stage-interview: oklch(0.74 0.088 305);
+  --stage-offer: oklch(0.75 0.078 168);
+  --stage-rejected: oklch(0.7 0.11 22);
+  --stage-withdrawn: oklch(0.72 0.012 340);
+}
+
+/* ------------------------------------------------------------------
+   语义色阶：覆盖 Tailwind 默认的 emerald/amber/rose/blue/violet/slate/zinc。
+   由单一基色 color-mix 出整条 ramp：50–400 往白里调，600–950 往深锚色里压。
+   刻意用默认家族名覆盖，是为了让既有代码里的 text-emerald-600 / bg-amber-50
+   不改一个类名就整体降饱和 —— 默认那套鲜艳的绿/琥珀/玫瑰红正是「通用仪表盘」的味道。
+   固定 ramp 同时满足两种模式：浅色用 600/700 当文字、50/100 当底；
+   深色用 300/400 当文字、900/950 当底。
+   ------------------------------------------------------------------ */
+@theme {
+  --color-emerald-50: color-mix(in oklab, var(--tone-good) 7%, white);
+  --color-emerald-100: color-mix(in oklab, var(--tone-good) 14%, white);
+  --color-emerald-200: color-mix(in oklab, var(--tone-good) 27%, white);
+  --color-emerald-300: color-mix(in oklab, var(--tone-good) 48%, white);
+  --color-emerald-400: color-mix(in oklab, var(--tone-good) 72%, white);
+  --color-emerald-500: var(--tone-good);
+  --color-emerald-600: color-mix(in oklab, var(--tone-good) 84%, var(--tone-anchor));
+  --color-emerald-700: color-mix(in oklab, var(--tone-good) 70%, var(--tone-anchor));
+  --color-emerald-800: color-mix(in oklab, var(--tone-good) 55%, var(--tone-anchor));
+  --color-emerald-900: color-mix(in oklab, var(--tone-good) 40%, var(--tone-anchor));
+  --color-emerald-950: color-mix(in oklab, var(--tone-good) 26%, var(--tone-anchor));
+
+  --color-amber-50: color-mix(in oklab, var(--tone-warn) 9%, white);
+  --color-amber-100: color-mix(in oklab, var(--tone-warn) 17%, white);
+  --color-amber-200: color-mix(in oklab, var(--tone-warn) 31%, white);
+  --color-amber-300: color-mix(in oklab, var(--tone-warn) 52%, white);
+  --color-amber-400: color-mix(in oklab, var(--tone-warn) 76%, white);
+  --color-amber-500: var(--tone-warn);
+  --color-amber-600: color-mix(in oklab, var(--tone-warn) 84%, var(--tone-anchor));
+  --color-amber-700: color-mix(in oklab, var(--tone-warn) 70%, var(--tone-anchor));
+  --color-amber-800: color-mix(in oklab, var(--tone-warn) 55%, var(--tone-anchor));
+  --color-amber-900: color-mix(in oklab, var(--tone-warn) 40%, var(--tone-anchor));
+  --color-amber-950: color-mix(in oklab, var(--tone-warn) 26%, var(--tone-anchor));
+
+  --color-rose-50: color-mix(in oklab, var(--tone-bad) 8%, white);
+  --color-rose-100: color-mix(in oklab, var(--tone-bad) 15%, white);
+  --color-rose-200: color-mix(in oklab, var(--tone-bad) 29%, white);
+  --color-rose-300: color-mix(in oklab, var(--tone-bad) 50%, white);
+  --color-rose-400: color-mix(in oklab, var(--tone-bad) 74%, white);
+  --color-rose-500: var(--tone-bad);
+  --color-rose-600: color-mix(in oklab, var(--tone-bad) 84%, var(--tone-anchor));
+  --color-rose-700: color-mix(in oklab, var(--tone-bad) 70%, var(--tone-anchor));
+  --color-rose-800: color-mix(in oklab, var(--tone-bad) 55%, var(--tone-anchor));
+  --color-rose-900: color-mix(in oklab, var(--tone-bad) 40%, var(--tone-anchor));
+  --color-rose-950: color-mix(in oklab, var(--tone-bad) 26%, var(--tone-anchor));
+
+  --color-blue-50: color-mix(in oklab, var(--tone-info) 8%, white);
+  --color-blue-300: color-mix(in oklab, var(--tone-info) 50%, white);
+  --color-blue-500: var(--tone-info);
+  --color-blue-700: color-mix(in oklab, var(--tone-info) 70%, var(--tone-anchor));
+  --color-blue-950: color-mix(in oklab, var(--tone-info) 26%, var(--tone-anchor));
+
+  --color-violet-50: color-mix(in oklab, var(--tone-lilac) 8%, white);
+  --color-violet-300: color-mix(in oklab, var(--tone-lilac) 50%, white);
+  --color-violet-500: var(--tone-lilac);
+  --color-violet-700: color-mix(in oklab, var(--tone-lilac) 70%, var(--tone-anchor));
+  --color-violet-950: color-mix(in oklab, var(--tone-lilac) 26%, var(--tone-anchor));
+
+  --color-slate-100: color-mix(in oklab, var(--tone-slate) 12%, white);
+  --color-slate-200: color-mix(in oklab, var(--tone-slate) 24%, white);
+  --color-slate-300: color-mix(in oklab, var(--tone-slate) 46%, white);
+  --color-slate-700: color-mix(in oklab, var(--tone-slate) 72%, var(--tone-anchor));
+  --color-slate-800: color-mix(in oklab, var(--tone-slate) 56%, var(--tone-anchor));
+
+  --color-zinc-100: color-mix(in oklab, var(--tone-zinc) 12%, white);
+  --color-zinc-400: color-mix(in oklab, var(--tone-zinc) 74%, white);
+  --color-zinc-600: color-mix(in oklab, var(--tone-zinc) 84%, var(--tone-anchor));
+  --color-zinc-800: color-mix(in oklab, var(--tone-zinc) 56%, var(--tone-anchor));
+
+  /* 展示字体：衬线只用于标题、字标和 KPI 数字 —— 这是全站「非 AI 感」的来源 */
+  --font-display: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun",
+    Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+}
+
+/* ------------------------------------------------------------------
+   把核心令牌注册成工具类（bg-background / text-foreground …）
+   ------------------------------------------------------------------ */
+@theme inline {
+  --radius-sm: calc(var(--radius) - 8px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --radius-2xl: calc(var(--radius) + 14px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/* ------------------------------------------------------------------
+   玻璃面板与画布
+   ------------------------------------------------------------------ */
+
+/* 磨砂面板：半透明底 + 背景模糊 + 顶边高光，替代原来的实心卡片 + 描边 */
+@utility glass {
+  background-color: var(--card);
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  box-shadow:
+    0 1px 0 0 oklch(1 0 0 / 55%) inset,
+    0 18px 40px -24px oklch(0.45 0.06 340 / 32%);
+}
+
+.dark .glass {
+  box-shadow:
+    0 1px 0 0 oklch(1 0 0 / 8%) inset,
+    0 18px 40px -24px oklch(0 0 0 / 60%);
+}
+
+/* 页面画布：三团极淡的光晕，替代平铺纯色 */
+@utility canvas-bloom {
+  background-image:
+    radial-gradient(1100px 560px at 8% -12%, oklch(0.9 0.055 342 / 62%), transparent 62%),
+    radial-gradient(900px 480px at 98% 4%, oklch(0.92 0.045 300 / 55%), transparent 64%),
+    radial-gradient(1000px 620px at 46% 112%, oklch(0.93 0.04 18 / 42%), transparent 66%);
+}
+
+.dark .canvas-bloom {
+  background-image:
+    radial-gradient(1100px 560px at 8% -12%, oklch(0.42 0.07 342 / 45%), transparent 62%),
+    radial-gradient(900px 480px at 98% 4%, oklch(0.4 0.06 300 / 40%), transparent 64%),
+    radial-gradient(1000px 620px at 46% 112%, oklch(0.38 0.05 18 / 32%), transparent 66%);
+}
+
+/* 小字号 + 字距：参考图里的标签都是这种处理 */
+@utility eyebrow {
+  font-size: 0.6875rem;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-background text-foreground canvas-bloom;
+    background-attachment: fixed;
+    margin: 0;
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  /* 衬线字标/标题统一收紧一点字距，避免中文衬线显得松散 */
+  .font-display {
+    font-family: var(--font-display);
+    font-feature-settings: "palt" 1;
+  }
+  /* 滚动条也纳入主题，默认的灰蓝条很出戏 */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--primary) 22%, transparent);
+    border: 3px solid transparent;
+    background-clip: content-box;
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklab, var(--primary) 38%, transparent);
+    background-clip: content-box;
+  }
+}

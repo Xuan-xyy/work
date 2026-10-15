@@ -1,0 +1,136 @@
+/* ============================================================
+   设计令牌 — 秋招 × 实习成长工作台
+   极简 / Notion 蓝 / 8px 圆角 / 低密度留白
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:root {
+  /* 字体 */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "PingFang SC",
+               "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC",
+               Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "JetBrains Mono", "Cascadia Mono", Consolas, monospace;
+
+  /* 尺度 */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --sidebar-w: 240px;
+  --topbar-h: 64px;
+  --content-max: 1320px;
+
+  /* 浅色 · 白 / 浅灰 / Notion 蓝 */
+  --bg:            #ffffff;
+  --bg-subtle:     #f7f7f5;
+  --bg-sunken:     #f1f1ef;
+  --surface:       #ffffff;
+  --surface-hover: #f7f7f5;
+  --sidebar-bg:    #fbfbfa;
+  --border:        #e9e9e7;
+  --border-strong: #dcdcd9;
+
+  --text-1: #37352f;
+  --text-2: #6f6e69;
+  --text-3: #9b9a97;
+
+  --accent:        #2383e2;
+  --accent-hover:  #1a73cc;
+  --accent-soft:   #e8f1fb;
+  --accent-softer: #f4f9fe;
+
+  --success:      #2f9e6b;
+  --success-soft: #e9f5ef;
+  --warn:         #b8811b;
+  --warn-soft:    #fbf3e3;
+  --danger:       #cf4f47;
+  --danger-soft:  #fdeceb;
+  --purple:       #7a5cd0;
+  --purple-soft:  #f0ecfb;
+
+  --shadow-sm: 0 1px 2px rgba(15, 15, 15, .04);
+  --shadow:    0 4px 12px rgba(15, 15, 15, .07), 0 1px 3px rgba(15, 15, 15, .05);
+  --shadow-lg: 0 16px 40px rgba(15, 15, 15, .13), 0 2px 8px rgba(15, 15, 15, .06);
+
+  --ease: cubic-bezier(.32, .72, 0, 1);
+  --dur: 140ms;
+}
+
+[data-theme="dark"] {
+  --bg:            #191919;
+  --bg-subtle:     #1f1f1f;
+  --bg-sunken:     #242424;
+  --surface:       #202020;
+  --surface-hover: #2a2a2a;
+  --sidebar-bg:    #1c1c1c;
+  --border:        #2f2f2f;
+  --border-strong: #3d3d3d;
+
+  --text-1: #ededec;
+  --text-2: #9b9a97;
+  --text-3: #6f6e69;
+
+  --accent:        #529cea;
+  --accent-hover:  #6aabf0;
+  --accent-soft:   #1b2b3d;
+  --accent-softer: #1a2330;
+
+  --success:      #4fb783;
+  --success-soft: #16281f;
+  --warn:         #d2a153;
+  --warn-soft:    #2b2418;
+  --danger:       #e07a72;
+  --danger-soft:  #2e1d1c;
+  --purple:       #9b84e6;
+  --purple-soft:  #23203a;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3);
+  --shadow:    0 4px 14px rgba(0, 0, 0, .38);
+  --shadow-lg: 0 18px 44px rgba(0, 0, 0, .5);
+}
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-1);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+h1, h2, h3, h4, p, figure { margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+a { color: inherit; text-decoration: none; }
+button, input, select, textarea { font: inherit; color: inherit; }
+svg { display: block; flex: none; }
+
+::selection { background: var(--accent-soft); }
+
+/* 细腻滚动条 */
+* { scrollbar-width: thin; scrollbar-color: var(--border-strong) transparent; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 999px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: var(--text-3); background-clip: content-box; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
